@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:lang="${#locale.language}">
+<head>
+    <title>vaccine.py</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vaccine.py Project">
+    <meta name="keywords" content="vaccine, paraguay, py, taiwan, tw">
+    <meta name="author" content="Walker088">
+    <meta name="ctx" th:content="@{/}"/>
+    <meta name="locale"content="en_US" th:content="${#locale}" />
+    <link href="../static/public/images/favicon.ico" th:href="@{/public/images/favicon.ico}" rel="shortcut icon" type="image/x-icon"/>
+</head>
+<body>
+<div id="container" class="w-25 pt-5 m-auto fs-4">
+    <h2 th:text="#{login.title}">Vaccine.py Login page (Default)</h2>
+    <form th:action="@{/login.html}" method="post">
+        <label th:text="#{login.user}" class="mt-1" for="username">Username</label>
+        <input class="w-100 p-1" type="email" id="username" name="username" autofocus="autofocus" />
+        <label th:text="#{login.pass}" class="mt-1" for="password">Password</label>
+        <input class="w-100 p-1" type="password" id="password" name="password" />
+        <input class="w-100 p-2 mt-4 rounded-3 border-0 text-white bg-primary bg-gradient" id="submit" type="submit" value="Log in" />
+    </form>
+    <p th:if="${loginError}" th:text="#{login.error}" class="mt-3 text-danger text-center fs-5">The user or the password is incorrect</p>
+</div>
+
+<nav class="navbar fixed-bottom navbar-light bg-primary bg-gradient" style="background-color: #e3f2fd;">
+    <div class="container-fluid">
+        <form class="d-flex w-25">
+            <label th:text="#{login.lang.label}" for="lang" class="navbar-text text-white mt-1 w-25">Language:</label>
+            <select class="form-select form-select-xs my-1 mx-2 w-50" id="lang">
+                <option value="en_US" th:text="#{login.lang.option.en}">English</option>
+                <option value="es_PY" th:text="#{login.lang.option.es}">Spanish</option>
+                <option value="zh_TW" th:text="#{login.lang.option.zh}">Chinese</option>
+            </select>
+        </form>
+    </div>
+</nav>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+    const _locale = document.querySelector("meta[name=locale]").getAttribute('content');
+    const _ctx = document.querySelector("meta[name=ctx]").getAttribute('content');
+
+    document.querySelector("#lang").value = _locale;
+    document.querySelector("#lang").dispatchEvent(new Event('change'));
+
+    document.querySelector('#lang').addEventListener('change', function() {
+        const lang = document.querySelector('#lang').value;
+        location.replace(`${_ctx}?locale=${lang}`);
+    });
+}, false);
+
+</script>
+
+<link href="../static/public/vender/bootstrap-5.0.1/css/bootstrap.min.css" th:href="@{/public/vender/bootstrap-5.0.1/css/bootstrap.min.css}" rel="stylesheet" />
+<!-- <script th:src="@{/public/vender/bootstrap-5.0.1/js/bootstrap.min.js}"></script> -->
+</body>
+</html>

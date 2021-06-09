@@ -1,0 +1,1 @@
+/home/walker088/Documents/Github/Walker088/vaccine.py/src/main/resources/static/public/css/style.css

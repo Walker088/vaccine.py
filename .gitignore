@@ -1,3 +1,6 @@
+# config file
+.vaccine.dev.env
+
 # Compiled class file
 *.class
 
@@ -21,3 +24,22 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+### Gradle
+bin/
+build/
+.gradle
+.gradletasknamecache
+gradle-app.setting
+!gradle-wrapper.jar
+HELP.md
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+### VS Code ###
+.vscode/
+
+### MacOS ###
+.DS_Store

@@ -1,0 +1,52 @@
+plugins {
+	id "org.flywaydb.flyway" version "6.2.2"
+	id 'org.springframework.boot' version '2.5.0'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'war'
+}
+
+group = 'tw.walker088'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	//implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.flywaydb:flyway-core'
+	//implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+	implementation 'org.postgresql:postgresql'
+
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	//runtimeOnly 'org.postgresql:postgresql'
+	annotationProcessor 'org.projectlombok:lombok'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	//testImplementation 'org.springframework.security:spring-security-test'
+}
+
+test {
+	useJUnitPlatform()
+}
+
+// flyway plugin configurations
+flyway {
+	url = 'jdbc:postgresql://%s:%s/%s?useUnicode=true&characterEncoding=utf8&ApplicationName=flyway'
+    url =  String.format(url, System.getenv('DB_HOST'), System.getenv('DB_PORT'), System.getenv('DB_NAME'))
+    user = System.getenv('DB_USER')
+    password = System.getenv('DB_PW')
+	configurations = ['compileClasspath']
+}
