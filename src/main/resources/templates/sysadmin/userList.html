@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:lang="${#locale.language}">
+<head>
+    <title>vaccine.py</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vaccine.py Project">
+    <meta name="keywords" content="vaccine, paraguay, py, taiwan, tw">
+    <meta name="author" content="Walker088">
+    <meta name="ctx" th:content="@{/}"/>
+    <meta name="locale"content="en_US" th:content="${#locale}" />
+    <link href="../../static/public/images/favicon.ico" th:href="@{/public/images/favicon.ico}" rel="shortcut icon" type="image/x-icon"/>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <h2 class="mt-3" th:utext="${userIcon} + ' ' + #{user.list.title}"><i class="fas fa-user"></i> List of Users</i></h2>
+        <hr class="border-5">
+        <div class="row">
+            <div class="col col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <a th:text="#{user.card.header}" class="link-dark" data-bs-toggle="collapse" href="#userTableDiv" aria-expanded="false" aria-controls="userTableDiv">Users</a>
+                    </div>
+                    <div class="card-body collapse show" id="userTableDiv">
+                        <table id="userTable" class="table mt-4 w-100">
+                            <thead>
+                                <tr>
+                                    <th th:text="#{user.list.table.id}">Email</th>
+                                    <th th:text="#{user.list.table.name}">Name</th>
+                                    <th th:text="#{user.list.table.activated}">Activated</th>
+                                    <th th:text="#{user.list.table.createdby}">Created By</th>
+                                    <th th:text="#{user.list.table.createdtime}">Created Time</th>
+                                    <th th:text="#{user.list.table.modifiedby}">Modified By</th>
+                                    <th th:text="#{user.list.table.modifiedtime}">Modified Time</th>
+                                    <th th:text="#{user.list.table.actions}">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="user : ${userList}">
+                                    <td name="user_email" th:text="${user.getUser_email()}">test@walker088.tw</td>
+                                    <td th:text="${user.getFullName()}">Juan</td>
+                                    <td th:utext="${user.getIs_activate()}" class="ps-4"><i class="far fa-check-circle"></i></td>
+                                    <td th:text="${user.getCreated_user()}">walker088@walker088.tw</td>
+                                    <td th:text="${user.getCreated_time()}">2021-06-10 10:10:58</td>
+                                    <td th:text="${user.getModified_user()}">walker088@walker088.tw</td>
+                                    <td th:text="${user.getModified_time()}">2021-06-10 10:10:58</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="navbar fixed-bottom navbar-light bg-primary bg-gradient" style="background-color: #e3f2fd;">
+            <div class="container-fluid">
+                <form class="d-flex w-25">
+                    <label th:text="#{login.lang.label}" for="lang" class="navbar-text text-white mt-1 w-25">Language:</label>
+                    <select class="form-select form-select-xs my-1 mx-2 w-50" id="lang">
+                        <option value="en_US" th:text="#{login.lang.option.en}">English</option>
+                        <option value="es_PY" th:text="#{login.lang.option.es}">Spanish</option>
+                        <option value="zh_TW" th:text="#{login.lang.option.zh}">Chinese</option>
+                    </select>
+                </form>
+            </div>
+        </nav>
+    </div>
+
+    <script th:inline="javascript">
+        const _locale = document.querySelector("meta[name=locale]").getAttribute("content");
+        const _ctx = `${location.protocol}//${location.host}${location.pathname}`;
+        const dataTableLangMapper = {
+            en_US: /*[[@{public/vender/dataTable-1.10.25/translations/dataTable-en.json}]]*/ "../../static/public/vender/dataTable-1.10.25/translations/dataTable-en.json",
+            es_PY: /*[[@{public/vender/dataTable-1.10.25/translations/dataTable-es_Mx.json}]]*/ "../../static/public/vender/dataTable-1.10.25/translations/dataTable-es_Mx.json",
+            zh_TW: /*[[@{public/vender/dataTable-1.10.25/translations/dataTable-zh_Han.json}]]*/ "../../static/public/vender/dataTable-1.10.25/translations/dataTable-zh_Han.json",
+        }
+
+        function addEvents() {
+            document.querySelector("#lang").value = _locale;
+            document.querySelector("#lang").dispatchEvent(new Event("change"));
+
+            document.querySelector("#lang").addEventListener("change", function () {
+                const lang = document.querySelector("#lang").value;
+                location.replace(`${_ctx}?locale=${lang}`);
+            });
+
+            $('button[name=restoreBtn]').on('click', async function () {
+                const target = $(this).closest('tr').find('td[name=user_email]').text();
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                            'Restored!',
+                            'Successfully restored the password of user ' + target,
+                            'success'
+                        )
+                    }
+                });
+            });
+
+            $('button[name=editBtn]').on('click', async function() {
+                const target = $(this).closest('tr').find('td[name=user_email]').text();
+                Swal.fire({
+                    title: 'Success!',
+                    text: `Successfully updated the password of ${target}`,
+                    icon: 'success',
+                    confirmButtonText: 'Close'
+                });
+            });
+        };
+
+        function addDataTable() {
+            const tableLang = dataTableLangMapper[_locale];
+            const restorePassBtnText = /*[[#{user.list.table.restore.btn}]]*/ "RESTORE PASS";
+            const restoreBtn = `<button type="button" class="btn btn-danger text-uppercase" name="restoreBtn">${restorePassBtnText}</button>`;
+            const editBtnText = /*[[#{user.list.table.edit.btn}]]*/ "EDIT";
+            const editBtn = `<button type="button" class="btn btn-primary text-uppercase" name="editBtn">${editBtnText}</button>`;
+
+            $("#userTable").DataTable({
+                dom: "Bfrtip",
+                searching: true,
+			    bPaginate: true,
+			    info: true,
+                scrollX: true,
+                language: {
+                    url: tableLang
+                },
+                createdRow: function(row, data, dataIndex, cells) {
+                    $('td', row).eq(7).html(`${editBtn} ${restoreBtn}`);
+                },
+                buttons: [
+                    {
+                        text: /*[[#{user.list.table.create.btn}]]*/ 'CREATE NEW USER',
+                        className: 'btn btn-warning fw-bold text-uppercase',
+                        action: function (e, dt, node, config) {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: `Successfully created the new user`,
+                                icon: 'success',
+                                confirmButtonText: 'Close'
+                            });
+                        }
+                    },
+                    {
+                        extend: 'copyHtml5',
+                        text: /*[[#{user.list.table.copy.btn}]]*/ 'COPY TABLE',
+                        className: 'btn btn-secondary text-uppercase',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        }
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: /*[[#{user.list.table.csv.btn}]]*/ 'EXPORT CSV',
+                        className: 'btn btn-secondary text-uppercase',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: /*[[#{user.list.table.pdf.btn}]]*/ 'EXPORT PDF',
+                        className: 'btn btn-secondary text-uppercase',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: /*[[#{user.list.table.print.btn}]]*/ 'PRINT',
+                        className: 'btn btn-secondary text-uppercase',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        }
+                    }
+                ]
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            addDataTable();
+            addEvents();
+        }, false);
+    </script>
+
+    <!-- Fontawesome 5 icons-->
+    <link href="../../static/public/vender/fontawesome-5.15.3/css/all.min.css" th:href="@{/public/vender/fontawesome-5.15.3/css/all.min.css}" rel="stylesheet" />
+
+    <!-- Bootstrap 5 -->
+    <link href="../../static/public/vender/bootstrap-5.0.1/css/bootstrap.min.css" th:href="@{/public/vender/bootstrap-5.0.1/css/bootstrap.min.css}" rel="stylesheet" />
+    <script src="../../static/public/vender/bootstrap-5.0.1/js/bootstrap.min.js" th:src="@{/public/vender/bootstrap-5.0.1/js/bootstrap.min.js}"></script>
+
+    <!-- DataTable with bootstrap style -->
+    <link href="../../static/public/vender/dataTable-1.10.25/css/dataTables.bootstrap5.min.css" th:href="@{/public/vender/dataTable-1.10.25/css/dataTables.bootstrap5.min.css}" rel="stylesheet" />
+    <script src="../../static/public/vender/jquery-3.6.0/jquery.min.js" th:src="@{/public/vender/jquery-3.6.0/jquery.min.js}"></script>
+    <script src="../../static/public/vender/dataTable-1.10.25/js/jquery.dataTables.min.js" th:src="@{/public/vender/dataTable-1.10.25/js/jquery.dataTables.min.js}"></script>
+    <script src="../../static/public/vender/dataTable-1.10.25/js/dataTables.bootstrap5.min.js" th:src="@{/public/vender/dataTable-1.10.25/js/dataTables.bootstrap5.min.js}"></script>
+    <!-- DataTable buttons -->
+    <script src="../../static/public/vender/jsZip-3.1.3/jszip.min.js" th:src="@{/public/vender/jsZip-3.1.3/jszip.min.js}"></script>
+    <script src="../../static/public/vender/pdfmake-0.1.53/pdfmake.min.js" th:src="@{/public/vender/pdfmake-0.1.53/pdfmake.min.js}"></script>
+    <script src="../../static/public/vender/pdfmake-0.1.53/vfs.fonts.js" th:src="@{/public/vender/pdfmake-0.1.53/vfs.fonts.js}"></script>
+    <script src="../../static/public/vender/dataTableButtons-1.7.1/buttons.print.min.js" th:src="@{/public/vender/dataTableButtons-1.7.1/buttons.print.min.js}"></script>
+    <script src="../../static/public/vender/dataTableButtons-1.7.1/buttons.html5.min.js" th:src="@{/public/vender/dataTableButtons-1.7.1/buttons.html5.min.js}"></script>
+    <script src="../../static/public/vender/dataTableButtons-1.7.1/dataTables.buttons.min.js" th:src="@{/public/vender/dataTableButtons-1.7.1/dataTables.buttons.min.js}"></script>
+
+    <script src="../../static/public/vender/sweetalert2-11.0.7/sweetalert.min.js" th:src="@{/public/vender/sweetalert2-11.0.7/sweetalert.min.js}"></script>
+</body>

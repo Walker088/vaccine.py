@@ -16,8 +16,9 @@ END$$;
 CREATE TABLE public.user_info
 (
     user_email email NOT NULL,
-    user_name character varying(40) NOT NULL,
     user_pass character varying(100) NOT NULL,
+    first_name character varying(30) NOT NULL,
+    last_name character varying(30) NOT NULL,
     is_activate boolean NOT NULL,
     created_user email NOT NULL,
     created_time timestamp without time zone NOT NULL,
@@ -30,11 +31,13 @@ ALTER TABLE public.user_info OWNER to postgres;
 -- Comments on pulic.user_info
 COMMENT ON COLUMN public.user_info.user_pass IS 'password bcrypt value';
 
--- Create the first user: sysadmin
+-- Create the first user: walker088@walker088.tw
+DELETE FROM public.user_info WHERE user_email = 'walker088@walker088.tw'::email;
 INSERT INTO public.user_info(
     user_email,
-    user_name,
     user_pass,
+    first_name,
+    last_name,
     is_activate,
     created_user,
     created_time,
@@ -42,12 +45,13 @@ INSERT INTO public.user_info(
     modified_time
 )
 VALUES(
-    'walker088@walker088.tw'
-    'walker088',
+    'walker088@walker088.tw',
     crypt('123', gen_salt('bf', 8)),
+    'Walker',
+    'Chen',
     true,
-    'flyway@v1.sql',
+    'walker088@walker088.tw',
     CURRENT_TIMESTAMP,
-    'flyway@v1.sql',
+    'walker088@walker088.tw',
     CURRENT_TIMESTAMP
 );
