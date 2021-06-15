@@ -1,6 +1,5 @@
 # config file
 .vaccine.dev.env
-application.properties
 
 # Compiled class file
 *.class
