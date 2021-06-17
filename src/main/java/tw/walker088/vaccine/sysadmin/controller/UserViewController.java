@@ -1,7 +1,7 @@
 package tw.walker088.vaccine.sysadmin.controller;
 
 //import tw.walker088.vaccine.sysadmin.model.User;
-import tw.walker088.vaccine.sysadmin.model.UserDto;
+import tw.walker088.vaccine.sysadmin.model.UserViewDto;
 import tw.walker088.vaccine.sysadmin.service.UserServiceInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class UserViewController {
     @GetMapping("/userlist")
     public String UserListView(Model model) {
 
-        var users = (List<UserDto>) userService.findAllUserAsDto();
+        var users = (List<UserViewDto>) userService.findAllUserAsDto();
 
         model.addAttribute("userIcon", "<i class=\"fas fa-user\"></i>");
         model.addAttribute("userList", users);

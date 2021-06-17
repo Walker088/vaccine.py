@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,18 +33,20 @@ public class User {
     @Column(name = "last_name", length = 30)
     private String last_name;
 
-    @Column(name = "is_activate", nullable = false)
-    private boolean is_activate;
+    @Column(name = "user_state", nullable = false)
+    private Integer user_state;
 
     @Column(name = "created_user", nullable = false)
     private String created_user;
 
-    @Column(name = "created_time", nullable = false)
+    @CreationTimestamp
+    @Column(name = "created_time", nullable = false, updatable = false)
     private LocalDateTime created_time;
 
     @Column(name = "modified_user", nullable = false)
     private String modified_user;
 
+    @UpdateTimestamp
     @Column(name = "modified_time", nullable = false)
     private LocalDateTime modified_time;
 }

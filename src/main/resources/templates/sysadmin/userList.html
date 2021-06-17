@@ -41,7 +41,7 @@
                                 <tr th:each="user : ${userList}">
                                     <td name="user_email" th:text="${user.getUser_email()}">test@walker088.tw</td>
                                     <td th:text="${user.getFullName()}">Juan</td>
-                                    <td th:utext="${user.getIs_activate()}" class="ps-4"><i class="far fa-check-circle"></i></td>
+                                    <td th:utext="${user.getUserStateIcon()}" class="ps-4"><i class="far fa-check-circle"></i></td>
                                     <td th:text="${user.getCreated_user()}">walker088@walker088.tw</td>
                                     <td th:text="${user.getCreated_time()}">2021-06-10 10:10:58</td>
                                     <td th:text="${user.getModified_user()}">walker088@walker088.tw</td>
